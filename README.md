@@ -1,6 +1,6 @@
 # 🖥 데이터베이스 (Database) 🖥
 
-
+<img src="https://user-images.githubusercontent.com/58673491/229270003-8eebb1cd-0305-47c8-9977-8e6d58056ff1.jpg"/>
 
 - - -
 
