@@ -18,6 +18,6 @@
 * [데이터베이스 관리 시스템 (DataBase Management System: DBMS)](https://kangdy25.tistory.com/124)
 * [데이터베이스 시스템 (DataBase System: DBS)](https://kangdy25.tistory.com/125)
 
-### 2. 데이터베이스 모델링
+### 2. 데이터 모델과 연산
 * [데이터 모델링 (Data Modeling)](https://kangdy25.tistory.com/126)
 * [관계 데이터 모델 (Relational Data Model)](https://kangdy25.tistory.com/127)
