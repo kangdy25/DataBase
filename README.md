@@ -22,4 +22,4 @@ MySQL로 실습을 하며 데이터베이스 관리자의 능력을 함양한다
 ### 2. 데이터 모델과 연산
 * [데이터 모델링 (Data Modeling)](https://kangdy25.tistory.com/126)
 * [관계 데이터 모델 (Relational Data Model)](https://kangdy25.tistory.com/127)
-* [관계 데이터 연산 (Relationship Data Operation)](https://kangdy25.tistory.com/129)
+* [관계 데이터 연산 (Relationship Data Operation)](https://kangdy25.tistory.com/131)
