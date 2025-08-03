@@ -48,3 +48,16 @@ SELECT * FROM movies
   -- WHERE overview LIKE '%kimchi%';
   -- WHERE title LIKE '______ing';
   WHERE title LIKE 'The ___';
+
+  -- SELECT CASE
+SELECT 
+  title, 
+  CASE 
+    WHEN rating >= 8 then
+      '👍🏻'
+    WHEN rating <= 6 THEN
+      '👎🏻'
+    ELSE
+      '👀' 
+    END AS good_or_not
+  FROM movies;
