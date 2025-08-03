@@ -9,4 +9,3 @@ create table movies (
 ) strict;
 
 drop table movies
-
