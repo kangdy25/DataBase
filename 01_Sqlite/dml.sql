@@ -61,3 +61,9 @@ SELECT
       '👀' 
     END AS good_or_not
   FROM movies;
+
+  -- ORDER BY
+SELECT * FROM movies
+ORDER BY 
+  release_date ASC,
+  revenue DESC
