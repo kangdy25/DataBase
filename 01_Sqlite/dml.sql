@@ -49,7 +49,7 @@ SELECT * FROM movies
   -- WHERE title LIKE '______ing';
   WHERE title LIKE 'The ___';
 
-  -- SELECT CASE
+-- SELECT CASE
 SELECT 
   title, 
   CASE 
@@ -62,8 +62,14 @@ SELECT
     END AS good_or_not
   FROM movies;
 
-  -- ORDER BY
+-- ORDER BY
 SELECT * FROM movies
 ORDER BY 
   release_date ASC,
   revenue DESC
+
+-- LIMIT
+SELECT * FROM movies LIMIT 5;
+
+-- OFFSET
+SELECT * FROM movies LIMIT 50 OFFSET 2 * 50;
