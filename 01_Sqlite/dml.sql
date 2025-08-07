@@ -73,3 +73,27 @@ SELECT * FROM movies LIMIT 5;
 
 -- OFFSET
 SELECT * FROM movies LIMIT 50 OFFSET 2 * 50;
+
+-- GROUP BY
+-- ("감독 별", 총 수익)
+SELECT 
+  director, 
+  SUM(revenue) AS total_revenue 
+FROM 
+  movies
+WHERE director IS NOT NULL
+      AND revenue IS NOT NULL
+GROUP BY 
+  director 
+ORDER BY 
+  total_revenue DESC;
+
+-- ("개봉년도 별", 평점)
+SELECT release_date, round(AVG(rating), 2) AS avg_rating FROM movies
+  WHERE 
+    rating IS NOT NULL 
+    AND release_date IS NOT NULL
+GROUP by
+  release_date
+ORDER BY
+  avg_rating DESC
