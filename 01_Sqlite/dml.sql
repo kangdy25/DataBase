@@ -97,3 +97,19 @@ GROUP by
   release_date
 ORDER BY
   avg_rating DESC
+
+-- HAVING
+SELECT -- 5
+  release_date, 
+  round(AVG(rating), 2) AS avg_rating 
+FROM -- 1
+  movies 
+WHERE -- 2
+  rating IS NOT NULL 
+  AND release_date IS NOT NULL
+GROUP by -- 3
+  release_date
+HAVING -- 4
+  avg_rating > 6
+ORDER BY -- 6
+  avg_rating DESC
