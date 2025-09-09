@@ -142,3 +142,62 @@ WHERE (release_date IS NOT NULL
       AND runtime IS NOT NULL)
 GROUP BY decade
 ORDER BY avg_runtime DESC;
+
+-- 11. 영화의 최고 평점과 최저 평점 차이가 가장 큰 상위 5개 연도
+SELECT 
+  release_date,
+  MAX(rating) AS maximum,
+  MIN(rating) AS minimum,
+  MAX(rating) - MIN(rating) AS diff
+  FROM movies 
+WHERE release_date IS NOT NULL 
+      AND rating IS NOT NULL
+GROUP BY release_date
+ORDER BY diff DESC
+LIMIT 5;
+
+-- 12. 2시간 미만의 영화를 만들어 본 적이 한 번도 없는 감독
+SELECT 
+  director,
+  MIN (runtime)
+from movies 
+WHERE director IS NOT NULL 
+GROUP BY director
+HAVING MIN(runtime) > 120;
+
+-- 13. 전체 영화에서 평점이 8.0 초과인 영화의 비율
+SELECT
+  COUNT(CASE WHEN rating > 8 THEN 1 END) * 100.0 / COUNT(*) AS ratio
+FROM movies;
+
+-- 14. 평점이 7.0보다 높은 영화가 차지하는 비율이 가장 높은 감독
+SELECT 
+  director,
+  COUNT(CASE WHEN rating > 7.0 THEN 1.0 END) * 100.0 / COUNT(*) AS ratio
+FROM movies 
+WHERE director IS NOT NULL 
+GROUP BY director
+HAVING COUNT(*) >= 5
+ORDER BY ratio DESC;
+
+-- 15. 길이별로 영화를 분류하고 그룹화하기
+SELECT
+  CASE WHEN runtime < 90 THEN 'SHORT' 
+        WHEN runtime BETWEEN 90 AND 120 THEN 'MEDIUM'
+        WHEN runtime > 120 THEN 'LONG' 
+        END AS runtime_category,
+  COUNT(*) AS total_movies
+FROM movies
+WHERE runtime IS NOT NULL
+GROUP BY runtime_category
+ORDER BY runtime_category DESC;
+
+-- 16. flop 여부에 따라 영화를 분류 및 그룹화하기
+SELECT 
+  CASE WHEN revenue < budget THEN 'FLOP' ELSE 'SUCCESS' END AS is_success,
+  COUNT(*) AS total_movies
+FROM movies 
+WHERE budget IS NOT NULL
+      AND revenue IS NOT NULL
+GROUP BY is_success
+ORDER BY total_movies DESC;
