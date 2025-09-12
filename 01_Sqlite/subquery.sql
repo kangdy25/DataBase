@@ -70,3 +70,23 @@ FROM movies AS M1
 WHERE 
   release_date > 2022 AND
   M1.rating > (SELECT * FROM movie_avg_per_year)
+
+-- Find the directors with a career revenue higher than the average revenue of all directors.
+WITH directors_revenues AS (SELECT 
+    director, 
+    SUM(revenue) AS career_revenue
+  from movies
+  WHERE director IS NOT NULL AND revenue IS NOT NULL
+  GROUP BY director
+), avg_director_career_revenue AS (SELECT 
+  AVG(career_revenue) 
+  FROM directors_revenues)
+  
+SELECT 
+  director, 
+  SUM(revenue) AS total_revenue,
+  ROUND((SELECT * FROM avg_director_career_revenue), 3) AS peers_avg
+from movies
+WHERE director IS NOT NULL AND revenue IS NOT NULL
+GROUP BY director
+HAVING total_revenue > (SELECT * FROM avg_director_career_revenue)
