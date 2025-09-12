@@ -28,3 +28,26 @@ SELECT
 from movies 
 where revenue > (SELECT * FROM avg_revenue_cte)
       AND rating > (SELECT * FROM avg_rating_cte)
+
+-- Find the movies with a rating higher than the average rating of movies released in the same year.
+-- Correlated Subqueries
+SELECT 
+  M1.title, 
+  M1.director, 
+  M1.rating,
+  M1.release_date,
+  ROUND((SELECT 
+    AVG(M2.rating)
+   FROM 
+    movies AS M2
+   WHERE 
+    M2.release_date = M1.release_date), 3) AS year_average
+FROM movies AS M1
+WHERE 
+  release_date > 2022 AND
+  M1.rating > (SELECT 
+                AVG(M2.rating)
+              FROM 
+                movies AS M2
+              WHERE 
+                M2.release_date = M1.release_date)
