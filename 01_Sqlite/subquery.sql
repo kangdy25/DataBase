@@ -51,3 +51,22 @@ WHERE
                 movies AS M2
               WHERE 
                 M2.release_date = M1.release_date)
+
+-- Correlatied CTEs
+WITH movie_avg_per_year AS (SELECT 
+    AVG(M2.rating)
+   FROM 
+    movies AS M2
+   WHERE 
+    M2.release_date = M1.release_date)
+
+SELECT 
+  M1.title, 
+  M1.director, 
+  M1.rating,
+  M1.release_date,
+  ROUND((SELECT * FROM movie_avg_per_year), 3) AS year_average
+FROM movies AS M1
+WHERE 
+  release_date > 2022 AND
+  M1.rating > (SELECT * FROM movie_avg_per_year)
