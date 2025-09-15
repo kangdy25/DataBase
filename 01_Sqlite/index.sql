@@ -65,3 +65,10 @@ FROM director_stats AS ds
 CREATE INDEX idx_director ON movies (director)
 
 DROP INDEX idx_director;
+
+-- Primary Key & Index
+CREATE TABLE X (name TEXT);
+
+INSERT INTO X VALUES ('Hello');
+
+SELECT name, rowid FROM X;
