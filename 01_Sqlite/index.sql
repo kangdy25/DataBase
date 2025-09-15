@@ -82,3 +82,14 @@ WHERE
   AND rating > 7;
 
 CREATE INDEX idx on movies (release_date, rating);
+
+-- Covering Indexes
+EXPLAIN QUERY plan 
+  SELECT 
+  title
+FROM movies
+WHERE rating > 7
+
+CREATE INDEX idx on movies (rating);
+CREATE INDEX idx on movies (rating, title);
+DROP INDEX idx
