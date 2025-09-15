@@ -72,3 +72,13 @@ CREATE TABLE X (name TEXT);
 INSERT INTO X VALUES ('Hello');
 
 SELECT name, rowid FROM X;
+
+-- Multi Column Indexes
+EXPLAIN QUERY plan SELECT 
+  title
+FROM movies
+WHERE 
+  release_date = 2022
+  AND rating > 7;
+
+CREATE INDEX idx on movies (release_date, rating);
