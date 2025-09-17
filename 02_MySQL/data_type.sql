@@ -1,7 +1,8 @@
 CREATE TABLE users (
-  username CHAR(10), -- 'nico' -> 'nico      '
-  email VARCHAR(50), -- 'nico@nomad.co' ---> nico@nomad.co
-  gender ENUM('MALE', 'FEMALE'),
+  user_id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+  username CHAR(10) NOT NULL UNIQUE, -- 'nico' -> 'nico      '
+  email VARCHAR(50) NOT NULL, -- 'nico@nomad.co' ---> nico@nomad.co
+  gender ENUM('MALE', 'FEMALE') NOT NULL,
   interests SET (
     'Art',
     'Sports',
@@ -10,11 +11,11 @@ CREATE TABLE users (
     'Programming',
     'Travel',
     'Fashion',
-    'Fodd'
-  ),
+    'Food'
+  ) NOT NULL,
     -- TINYTEXT <= 255(B), TEXT <= 65,535(64KB), 
     -- MEDIUMTEXT <= 16,777,215 (16MB), LONGTEXT <= 4,294,967,295 (4GB)
-  bio TEXT,
+  bio TEXT NOT NULL,
     -- TINYBLOB (255B), BLOB(64KB), MEDIUMBLOB(16MB), LONGBLOB(4GB)
   profile_picture TINYBLOB, 
 
@@ -47,7 +48,22 @@ CREATE TABLE users (
     -- Range: -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807
     -- Unsigned:
     -- Range: 0 to 18,446,744,073,709,551,615
-  age TINYINT UNSIGNED,
+  age TINYINT UNSIGNED NOT NULL,
 
-  is_admin BOOLEAN -- TINYINT(1, 0)
+  is_admin BOOLEAN DEFAULT FALSE NOT NULL, -- TINYINT(1, 0),
+  
+  balance1 DECIMAL(5, 2) DEFAULT 0.0 NOT NULL, -- DECIMAL (presicion, scale) 999.23
+  balance2 float DEFAULT 0.0 NOT NULL, -- FLOAT 1.40
+  
+  joined_at1 TIMESTAMP NOT NULL, -- DATETIME YYYY-MM-DD HH:MM:SS
+  joined_at2 DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
+  birth_date DATE NOT NULL, -- 2001-05-25
+  bed_time TIME NOT NULL, -- 23:59:59
+  graduation_year YEAR NOT NULL,-- 1901 ~ 2155
+
+  -- JSON, GEOMETRY, POINT, LINESTRING, POLYGON, MULTIPOINT, MULTILINESTRING, EMULTIPOLYGON & GEOMETRYCOLLECTION
+
+  CONSTRAINT chk_age CHECK(age < 100),
+  CONSTRAINT uq_email UNIQUE (email) 
 )
