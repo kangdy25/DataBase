@@ -126,5 +126,20 @@ ALTER TABLE users ADD CONSTRAINT chk_age CHECK (age < 100)
 
 ALTER TABLE users MODIFY COLUMN bed_time TIME NULL
 ALTER TABLE users MODIFY COLUMN bed_time TIME NOT NULL
+
+-- DATA Conflict
+ALTER TABLE users MODIFY COLUMN graduation_year DATE -- X
+
+SELECT graduation_year, MAKEDATE(graduation_year, 1) from users
+
+-- How to solve the data conflict? 1
+ALTER TABLE users ADD COLUMN graduation_date DATE -- Add Column
+UPDATE users SET graduation_date = MAKEDATE(graduation_year, 1) -- Udpate New Column
+ALTER TABLE users DROP COLUMN graduation_year -- Delete Legacy Column
+ALTER TABLE users MODIFY COLUMN graduation_date DATE NOT NULL -- Add NOT NULL Constraint
+
+-- How to solve the data conflict? 2
+ALTER TABLE users ADD COLUMN graduation_date DATE NOT NULL DEFAULT MAKEDATE(graduation_year, 1)
+ALTER TABLE users DROP COLUMN graduation_year -- Delete Legacy Column
   
 SHOW CREATE TABLE users
