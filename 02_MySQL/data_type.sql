@@ -1,8 +1,8 @@
 CREATE TABLE users (
   user_id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-  username CHAR(10) NOT NULL UNIQUE, -- 'nico' -> 'nico      '
+  username CHAR(15) NOT NULL UNIQUE, -- 'nico' -> 'nico      '
   email VARCHAR(50) NOT NULL, -- 'nico@nomad.co' ---> nico@nomad.co
-  gender ENUM('MALE', 'FEMALE') NOT NULL,
+  gender ENUM('Male', 'Female') NOT NULL,
   interests SET (
     'Art',
     'Sports',
@@ -55,7 +55,7 @@ CREATE TABLE users (
   balance1 DECIMAL(5, 2) DEFAULT 0.0 NOT NULL, -- DECIMAL (presicion, scale) 999.23
   balance2 float DEFAULT 0.0 NOT NULL, -- FLOAT 1.40
   
-  joined_at1 TIMESTAMP NOT NULL, -- DATETIME YYYY-MM-DD HH:MM:SS
+  joined_at1 TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, -- DATETIME YYYY-MM-DD HH:MM:SS
   joined_at2 DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
   birth_date DATE NOT NULL, -- 2001-05-25
@@ -66,4 +66,30 @@ CREATE TABLE users (
 
   CONSTRAINT chk_age CHECK(age < 100),
   CONSTRAINT uq_email UNIQUE (email) 
+)
+
+DROP TABLE users
+
+INSERT INTO users (
+  username,
+  email,
+  gender,
+  interests,
+  bio,
+  age,
+  is_admin,
+  birth_date,
+  bed_time,
+  graduation_year
+) VALUES (
+  '동붕이',
+  '동붕이@coding.com',
+  'Male',
+  'Programming,Art,Math',
+  'I like Programming',
+  25,
+  TRUE,
+  '2001-05-25',
+  '23:59:59',
+  '2026'
 )
