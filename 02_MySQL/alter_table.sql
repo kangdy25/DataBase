@@ -143,3 +143,25 @@ ALTER TABLE users ADD COLUMN graduation_date DATE NOT NULL DEFAULT MAKEDATE(grad
 ALTER TABLE users DROP COLUMN graduation_year -- Delete Legacy Column
   
 SHOW CREATE TABLE users
+
+-- Generated Columns
+CREATE TABLE users_v2 (
+  user_id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+  first_name VARCHAR(50),
+  last_name VARCHAR(50),
+  email VARCHAR(100),
+  full_name VARCHAR(101) GENERATED ALWAYS AS (CONCAT(first_name, ' ', last_name)) STORED
+)
+
+INSERT INTO users_v2 (
+  first_name, last_name, email
+) VALUES ('DONGYOON', 'KANG', 'cnafrog@naver.com')
+
+SELECT * FROM users_v2
+
+-- string slicing
+ALTER TABLE users_v2 ADD COLUMN email_domain VARCHAR(50) GENERATED ALWAYS AS 
+  (SUBSTRING_INDEX('canfrog@naver.com', '@', -1))
+
+SELECT * FROM users_v2
+
