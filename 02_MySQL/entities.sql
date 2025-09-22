@@ -30,3 +30,19 @@ CREATE TABLE pet_passports (
     dog_id BIGINT UNSIGNED UNIQUE,
     FOREIGN KEY (dog_id) REFERENCES dogs (dog_id) ON DELETE CASCADE;
 )
+
+CREATE TABLE dog_tricks (
+  dog_id BIGINT UNSIGNED,
+  trick_id BIGINT UNSIGNED,
+  proficiency ENUM("beginner", "intermediate", "expert") NOT NULL DEFAULT "beginner",
+  date_learned TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (dog_id, trick_id),
+  FOREIGN KEY (dog_id) REFERENCES dogs (dog_id) ON DELETE CASCADE,
+  FOREIGN KEY (trick_id) REFERENCES tricks (trick_id) ON DELETE CASCADE
+);
+
+CREATE TABLE tricks (
+  trick_id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(50) NOT NULL,
+  difficult ENUM("easy", "medium", "hard")
+)
