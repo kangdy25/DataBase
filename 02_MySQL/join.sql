@@ -1,0 +1,2 @@
+-- CROSS JOIN 
+SELECT * FROM dogs CROSS JOIN owners;
