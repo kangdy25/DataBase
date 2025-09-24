@@ -101,3 +101,56 @@ FROM owners
   JOIN dog_tricks using (dog_id)
   JOIN tricks using (trick_id)
 ORDER BY owner_name
+
+-- 12. Show all breeds with their
+-- average dog weight and typical lifespan
+SELECT 
+  breeds.name AS breed_name,
+  AVG(dogs.weight) AS avg_weight,
+  breeds.typical_lifespan AS brees_t_lifespan
+FROM breeds
+  JOIN dogs using (breed_id)
+GROUP BY breeds.breed_id
+
+-- 13. Display all dogs with their
+-- latest checkup date
+-- and the time since their last checkup
+SELECT 
+  dogs.name AS dog_name,
+  pet_passports.last_checkup_date,
+  TIMESTAMPDIFF(month, pet_passports.last_checkup_date, CURDATE())
+FROM dogs
+  JOIN pet_passports using (dog_id)
+GROUP BY dogs.dog_id
+
+-- 14. Display all breeds with the name
+-- of the heaviest dog of that breed
+SELECT 
+  breeds.breed_id,
+  breeds.name AS breed_name,
+  dogs.name AS dog_name,
+  dogs.weight AS dog_weight
+FROM breeds
+  JOIN dogs using (breed_id)
+WHERE dogs.weight = (SELECT 
+    max(dogs.weight)
+  FROM dogs 
+  where(dogs.breed_id = breeds.breed_id) 
+)
+ORDER BY dog_weight DESC
+
+-- 15. List all tricks with the name
+-- of the dog who learned it most recently
+SELECT
+  tricks.name AS trick_name,
+  dogs.name AS dog_name,
+  dog_tricks.date_learned AS learned_date
+FROM tricks
+  JOIN dog_tricks using (trick_id)
+  JOIN dogs using (dog_id)
+WHERE dog_tricks.date_learned = (
+  SELECT max(dog_tricks.date_learned)
+  FROM dog_tricks
+  WHERE dog_tricks.trick_id = tricks.trick_id
+  GROUP BY trick_id
+)
