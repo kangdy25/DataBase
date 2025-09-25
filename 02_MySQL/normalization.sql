@@ -1,6 +1,6 @@
----------------------------
+---------------------------------
 -- Normalizing Status
----------------------------
+---------------------------------
 
 -- 1. 영화 상태를 별도 테이블로 분리 (정규화 대상)
 CREATE TABLE statuses (
@@ -34,9 +34,10 @@ UPDATE movies SET status_id = (SELECT status_id FROM statuses WHERE status_name 
 -- 6. movies 테이블에서 기존의 status 컬럼 제거
 ALTER TABLE movies DROP COLUMN status
 
----------------------------
+---------------------------------
 -- Normalizing Directors
----------------------------
+---------------------------------
+
 
 -- 1. 감독 정보를 별도로 저장할 테이블 생성 (정규화 대상)
 CREATE TABLE directors (
@@ -70,3 +71,37 @@ UPDATE movies SET director_id = (SELECT director_id FROM directors WHERE name = 
 
 -- 7. 기존 director 컬럼 제거
 ALTER TABLE movies DROP COLUMN director
+
+---------------------------------
+-- Normalizing Original Language
+---------------------------------
+
+-- 1. 언어 정보를 별도로 저장할 langs 테이블 생성 (정규화)
+CREATE TABLE langs (
+  lang_id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(120),
+  code CHAR(2),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL
+)
+
+-- 2. movies 테이블의 original_language 값을 langs.code 로 삽입
+--    (중복 제거하여 고유 코드만 저장)
+INSERT INTO langs (code)
+SELECT 
+  original_language 
+FROM movies 
+  GROUP BY original_language 
+
+-- 3. movies 테이블에 새로운 외래 키 컬럼 추가
+ALTER TABLE movies ADD COLUMN original_lang_id BIGINT UNSIGNED 
+
+-- 4. 외래 키 제약 추가: movies.original_lang_id → langs.lang_id
+--    언어가 삭제되면 movies.original_lang_id 는 NULL 처리
+ALTER TABLE movies ADD CONSTRAINT fk_org_lang FOREIGN KEY (original_lang_id) REFERENCES langs (lang_id) ON DELETE SET NULL
+
+-- 5. 기존 movies.original_language 값을 이용해 original_lang_id 업데이트
+UPDATE movies SET original_lang_id = (SELECT lang_id FROM langs WHERE code = movies.original_language)
+
+-- 6. 기존 original_language 컬럼 제거
+ALTER TABLE movies DROP COLUMN original_language
