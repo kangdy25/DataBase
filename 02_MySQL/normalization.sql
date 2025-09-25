@@ -38,7 +38,6 @@ ALTER TABLE movies DROP COLUMN status
 -- Normalizing Directors
 ---------------------------------
 
-
 -- 1. 감독 정보를 별도로 저장할 테이블 생성 (정규화 대상)
 CREATE TABLE directors (
   director_id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
@@ -105,3 +104,98 @@ UPDATE movies SET original_lang_id = (SELECT lang_id FROM langs WHERE code = mov
 
 -- 6. 기존 original_language 컬럼 제거
 ALTER TABLE movies DROP COLUMN original_language
+
+---------------------------------
+-- Normalizing Countries
+---------------------------------
+
+-- 1. 국가 코드 정보를 별도로 저장할 countries 테이블 생성 (정규화 대상)
+CREATE TABLE countries (
+  country_id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+  country_code CHAR(2) UNIQUE NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
+             ON UPDATE CURRENT_TIMESTAMP NOT NULL
+);
+
+-- 2. movies 테이블의 country 값을 분리하여 countries 테이블에 삽입
+--    여러 국가가 ','로 구분되어 있는 경우를 처리
+INSERT IGNORE INTO countries (country_code)
+-- 단일 국가
+SELECT 
+  country
+FROM movies
+WHERE country NOT LIKE '%,%'
+GROUP BY country 
+
+UNION
+-- 2개 국가, 첫 번째 국가
+SELECT 
+  SUBSTRING_INDEX(country, ',', 1)
+FROM movies 
+WHERE country LIKE '__,__'
+GROUP BY country
+
+UNION
+-- 2개 국가, 두 번째 국가
+SELECT 
+  SUBSTRING_INDEX(country, ',', -1)
+FROM movies 
+WHERE country LIKE '__,__'
+GROUP BY country
+
+UNION
+-- 3개 국가, 첫 번째 국가
+SELECT 
+  SUBSTRING_INDEX(country, ',', 1)
+FROM movies 
+WHERE country LIKE '__,__,__'
+GROUP BY country
+
+UNION 
+-- 3개 국가, 세 번째 국가
+SELECT 
+  SUBSTRING_INDEX(country, ',', -1)
+FROM movies 
+WHERE country LIKE '__,__,__'
+GROUP BY country
+
+UNION 
+-- 3개 국가, 두 번째 국가
+SELECT 
+  SUBSTRING_INDEX(SUBSTRING_INDEX(country, ',', 2), ',', -1)
+FROM movies 
+WHERE country LIKE '__,__,__'
+GROUP BY country;
+
+-- 3. countries.country_id를 1부터 다시 시작하도록 AUTO_INCREMENT 초기화
+ALTER TABLE countries AUTO_INCREMENT = 1;
+
+-- 4. country_id 순차 재번호 매기기
+SET @count = 0;
+UPDATE countries SET country_id = @count := @count+1;
+
+-- 5. movie_countries 테이블 생성 (movies와 countries 간 N:M 관계 테이블)
+CREATE TABLE movie_countries (
+  movie_id BIGINT UNSIGNED,
+  country_id BIGINT UNSIGNED,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, 
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
+             ON UPDATE CURRENT_TIMESTAMP NOT NULL,
+  PRIMARY KEY (movie_id, country_id),
+  FOREIGN KEY (movie_id) REFERENCES movies (movie_id) ON DELETE CASCADE,
+  FOREIGN KEY (country_id) REFERENCES countries (country_id) ON DELETE CASCADE
+);
+
+-- 6. movies와 countries를 연결하여 movie_countries에 데이터 삽입
+INSERT INTO movie_countries (movie_id, country_id)
+SELECT 
+  movies.movie_id,
+  countries.country_id
+FROM movies
+-- movies.country에 해당 국가 코드가 포함된 경우
+JOIN countries ON movies.country LIKE CONCAT('%', countries.country_code ,'%') 
+WHERE movies.country <> ''; -- 빈 값 제외
+
+-- 7. 기존 movies.country 컬럼 제거 
+ALTER TABLE movies DROP COLUMN country;
