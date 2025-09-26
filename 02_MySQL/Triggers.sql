@@ -42,3 +42,24 @@ CREATE TRIGGER after_movie_delete
   BEFORE DELETE ON movies
   FOR EACH ROW INSERT INTO records (changes) 
     VALUES (CONCAT('Bye Bye ', OLD.title))
+
+-- Overpowered Trigger
+DELIMITER $$
+CREATE TRIGGER after_movie_update
+AFTER UPDATE ON movies
+FOR EACH ROW 
+BEGIN
+  DECLARE changes TINYTEXT DEFAULT '';
+
+  IF NEW.title <> OLD.title THEN 
+    SET changes = CONCAT('title changed ', old.title, ' -> ', new.title, '\n');
+  END IF;
+
+  IF NEW.budget <> OLD.budget THEN 
+    SET changes = CONCAT(changes, 'budget changed ', old.budget, ' -> ', new.budget);
+  END IF;
+
+  INSERT INTO records (changes) VALUES (changes);
+  
+END$$
+DELIMITER ;
