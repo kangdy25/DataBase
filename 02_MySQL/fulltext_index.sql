@@ -15,3 +15,11 @@ SELECT
   MATCH (overview) AGAINST ('psyco*' IN BOOLEAN MODE) AS score
 FROM movies
 WHERE MATCH (overview) AGAINST ('psyco*' IN BOOLEAN MODE)
+
+-- Query Expansion
+SELECT 
+  title, 
+  overview,
+  MATCH (overview) AGAINST ('kimchi' WITH QUERY EXPANSION) AS score
+FROM movies
+WHERE MATCH (overview) AGAINST ('kimchi' WITH QUERY EXPANSION)
