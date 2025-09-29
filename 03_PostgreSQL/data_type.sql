@@ -7,5 +7,14 @@ CREATE TABLE users (
 	gender gender_type not null,
 	interest TEXT[] not null,
 	bio text,
-	profile_photo BYTEA
+	profile_photo BYTEA,
+	
+	age SMALLINT NOT NULL CHECK(age >= 0),
+	is_admin BOOLEAN NOT NULL DEFAULT FALSE,
+	joined_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	birth_date DATE NOT NULL,
+	bed_time TIME NOT NULL,
+	graduation_year INTEGER NOT NULL CHECK(graduation_year BETWEEN 1901 AND 2115),
+	internship_period INTERVAL 
 )
