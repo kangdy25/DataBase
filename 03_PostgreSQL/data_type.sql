@@ -18,3 +18,9 @@ CREATE TABLE users (
 	graduation_year INTEGER NOT NULL CHECK(graduation_year BETWEEN 1901 AND 2115),
 	internship_period INTERVAL 
 )
+
+-- FULL OUTER JOIN
+SELECT movies.title, directors.name
+FROM movies
+FULL OUTER JOIN directors USING (director_id)
+WHERE movies.director_id IS NULL OR directors.director_id IS NULL
