@@ -3,7 +3,7 @@
 
 .DS_Store
 
-00_Challenge/books_db.sqlite
-00_Challenge/spotify.sqlite
+00_Challenge/Nomad_Coder/books_db.sqlite
+00_Challenge/Nomad_Coder/spotify.sqlite
 01_Sqlite/movies_download.db
 02_MySQL/dogs_download.db
