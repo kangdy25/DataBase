@@ -27,3 +27,20 @@ SELECT
 	title,
 	(is_hit_or_flop(movies.*)).*
 FROM movies
+
+-- Trigger Functions
+CREATE OR REPLACE FUNCTION set_updated_at()
+RETURNS TRIGGER AS 
+$$
+	BEGIN
+		NEW.updated_at = CURRENT_TIMESTAMP;
+		RETURN NEW;
+	END;
+$$
+LANGUAGE plpgsql
+
+
+CREATE TRIGGER updated_at
+BEFORE UPDATE 
+ON movies
+FOR EACH ROW EXECUTE PROCEDURE set_updated_at();
