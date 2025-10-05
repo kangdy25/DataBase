@@ -43,7 +43,7 @@ CREATE VIEW 강좌교수(강좌명, 강의실, 수강제한인원, 교수이름)
 AS SELECT 
     강좌명, 강의실, 수강인원, 이름
 FROM 강좌, 교수
-WHERE 강좌.교수번호 = 교수.교수번호
+WHERE 강좌.교수번호 = 교수.교수번호;
 
 -- Problem 9
 COMMIT
@@ -51,3 +51,45 @@ ROLLBACK
 GRANT
 REVOKE
 CASCADE
+
+-- Problem 10
+GRANT SELECT ON 강좌 TO 홍길동;
+
+-- Problem 11
+GRANT ALL ON 학생 TO 홍길동 WITH GRANT OPTION;
+
+-- Problem 12
+REVOKE INSERT ON 교수 FROM 박문수;
+
+-- Problem 13
+REVOKE SELECT ON 수강 FROM 박문수 CASCADE;
+
+-- Problem 14
+DELETE FROM 상품
+WHERE 제품코드 = 'P-20';
+
+INSERT INTO 상품 VALUES(
+    'P-20',
+    'PLAYER',
+    8800,
+    6600
+);
+
+-- Problem 15
+SELECT
+    상호, 총액
+FROM 거래내역
+WHERE 총액 IN (SELECT MAX(총액) FROM 거래내역)
+
+-- Problem 16
+450
+3
+1
+
+-- Problem 17
+송윤아
+24
+사원
+
+-- Problem 18
+학번이 S로 시작하는 3문자를 표시한다.
