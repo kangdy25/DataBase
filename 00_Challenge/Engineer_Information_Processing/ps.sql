@@ -93,3 +93,38 @@ WHERE 총액 IN (SELECT MAX(총액) FROM 거래내역)
 
 -- Problem 18
 학번이 S로 시작하는 3문자를 표시한다.
+
+-- Problem 19
+2
+2
+4
+
+-- Problem 20
+장학내역
+학과
+AVG(장학금)
+
+-- Problem 21
+59
+지원학과 ASC, 점수 DESC
+
+-- Problem 22
+ALTER TABLE
+ADD
+
+-- Problem 23
+%신%
+
+-- Problem 24
+15000
+
+-- Problem 25
+UPDATE
+SELECT
+WHERE
+
+-- Problem 26
+4
+
+-- Problem 27
+1
