@@ -26,4 +26,5 @@ UPDATE
 SET balance = balance - 3000
 WHERE account_holder = 'Dongyoon';
 
+ROLLBACK;
 COMMIT;
