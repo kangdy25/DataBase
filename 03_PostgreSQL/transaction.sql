@@ -19,6 +19,8 @@ UPDATE
 SET balance = balance + 3000
 WHERE account_holder = 'Gun';
 
+SAVEPOINT transfer_one
+
 SELECT * FROM accounts 
 
 UPDATE 
@@ -26,5 +28,6 @@ UPDATE
 SET balance = balance - 3000
 WHERE account_holder = 'Dongyoon';
 
+ROLLBACK TO SAVEPOINT transfer_one
 ROLLBACK;
 COMMIT;
