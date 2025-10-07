@@ -40,3 +40,13 @@ $$
 LANGUAGE plpgsql;
  
 CALL hello_world_i('Dongyoon', 'japanese', NULL)
+
+-- Lock
+BEGIN;
+	SELECT 
+		balance 
+	FROM accounts a 
+	WHERE account_holder = 'Dongyoon';
+	FOR UPDATE 
+	-- FOR SHARE 
+COMMIT;
