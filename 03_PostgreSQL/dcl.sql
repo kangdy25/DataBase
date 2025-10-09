@@ -38,3 +38,34 @@ SELECT * FROM movies LIMIT 10;
 SELECT * 
 FROM movies 
 JOIN statuses s ON movies.status_id = s.status_id;
+
+----------------------
+-- Role 
+----------------------
+
+-- 🧩 새 역할(role) 생성: 이름은 editor (로그인 불가 기본 설정)
+CREATE ROLE editor;
+
+-- 📚 public 스키마 내 모든 테이블에 대해
+-- SELECT(조회), INSERT(삽입), UPDATE(수정) 권한 부여
+GRANT SELECT, INSERT, UPDATE ON ALL TABLES IN SCHEMA public TO editor;
+
+-- 👤 실제 로그인 가능한 유저(editor_one) 생성
+-- 비밀번호는 'words4ever'
+CREATE USER editor_one WITH PASSWORD 'words4ever';
+
+-- 🔗 editor 역할(role)을 editor_one 유저에게 부여
+-- => editor_one은 editor가 가진 권한을 상속받음
+GRANT editor TO editor_one;
+
+-- ❌ editor 역할이 movies 테이블에서 가지는 모든 권한 제거
+REVOKE ALL ON movies FROM editor;
+
+-- 🎬 movies 테이블 중 title 컬럼만 조회(SELECT) 가능하도록 권한 부여
+GRANT SELECT (title) ON movies TO editor;
+
+-- 💰 movies 테이블 중 budget 컬럼만 수정(UPDATE) 가능하도록 권한 부여
+GRANT UPDATE (budget) ON movies TO editor;
+
+-- 🚪 editor_one 유저의 동시 접속 제한: 최대 1개의 세션만 허용
+ALTER ROLE editor_one WITH CONNECTION LIMIT 1;
