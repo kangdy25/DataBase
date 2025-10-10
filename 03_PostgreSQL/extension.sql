@@ -1,10 +1,10 @@
 -- Extension List
 SELECT * FROM pg_available_extensions
 
+SELECT * FROM pg_extension
+
 -- HSTORE
 CREATE EXTENSION hstore
-
-SELECT * FROM pg_extension
 
 CREATE TABLE users(
 	user_id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
@@ -36,3 +36,20 @@ WHERE user_id = 1
 UPDATE users SET prefs = prefs || hstore(ARRAY['currency', 'cookies_ok'], ARRAY['krw', 'yes'])
 
 UPDATE users SET prefs = DELETE(prefs, 'cookies_ok')
+
+-- PGCrypto
+CREATE EXTENSION pgcrypto
+
+CREATE TABLE users(
+	user_id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+	username VARCHAR(100),
+	password VARCHAR(100)
+)
+
+INSERT INTO users (username, password)
+VALUES ('nico', crypt('user_password', gen_salt('bf')))
+
+SELECT username FROM users 
+WHERE username = 'nico' AND password = crypt('user_password', password)
+
+SELECT * FROM users
