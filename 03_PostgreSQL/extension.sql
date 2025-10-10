@@ -53,3 +53,16 @@ SELECT username FROM users
 WHERE username = 'nico' AND password = crypt('user_password', password)
 
 SELECT * FROM users
+
+-- UUID
+CREATE EXTENSION "uuid-ossp"
+
+CREATE TABLE users(
+	user_id UUID PRIMARY KEY DEFAULT(uuid_generate_v4()),
+	username VARCHAR(100),
+	password VARCHAR(100)
+)
+
+INSERT INTO users (username, password) VALUES ('nico', '1234');
+
+SELECT * FROM users
