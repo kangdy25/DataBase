@@ -112,4 +112,17 @@ db.movies.updateMany(
   { $addToSet: { genres: { $each: ["Other", "Happy"] } } } // genres 길이 < 3일 때 값 추가
 )
 
+// 모든 문서 삭제
+db.movies.deleteMany({})
 
+// 특정 조건 삭제
+db.movies.deleteMany({ director: "Christopher Nolan" })
+db.movies.deleteMany({ genres: "Horror" })
+db.movies.deleteMany({ year: { $lt: 2000 } })
+db.movies.deleteMany({ $or: [{ rating: { $lt: 5 } }, { year: { $gte: 2025 } }] })
+
+// 단일 문서 삭제
+db.movies.deleteOne({ title: "EEAAO" })
+
+// 중첩 필드 기준 삭제
+db.movies.deleteMany({ "director.alive": false })
