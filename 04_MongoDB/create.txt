@@ -1,0 +1,17 @@
+show dbs
+
+use movies
+
+db.createCollection("movies")
+
+db.movies.insertOne({
+  title: "The Godfather",
+  year: 1999,
+  director: {
+    name: "F.F.C",
+    alive: true
+  },
+  genres: ["Crime", "Drama"]
+})
+
+db.movies.insertMany([{title: "EEAAO"}, {title: "The Godfather II"}])
