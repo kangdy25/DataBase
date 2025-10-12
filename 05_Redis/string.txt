@@ -1,0 +1,28 @@
+# 단일 키 저장
+SET users:1 dongyoon
+
+# 값 조회
+GET users:1
+
+# 여러 키 삭제 (존재하지 않는 키는 무시)
+DEL users:1 hello
+
+# 전체 데이터 삭제 (⚠️ 주의)
+FLUSHALL
+
+# 키가 없을 때만 저장(NX), 만료시간 10초(EX 10)
+SET users:1 dongyoon NX EX 10
+
+# 키가 있을 때만 갱신(XX)
+SET users:1 dongyoon XX
+
+# 여러 키 한 번에 저장
+MSET users:1 dongyoon users:2 lara users:3 ekklesia
+
+# 카운터 예제
+SET visitors 0
+INCR visitors       # +1
+DECR visitors       # -1
+
+INCRBY visitors 10  # +10
+DECRBY visitors 10  # -10
