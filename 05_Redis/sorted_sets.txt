@@ -1,0 +1,39 @@
+# 점수(score)와 함께 멤버 추가
+ZADD scores 1 user:1 2 user:2 10 user:3 6 user:4
+
+# 오름차순 정렬로 모든 멤버 조회
+ZRANGE scores 0 -1
+
+# 오름차순 + 점수 함께 조회
+ZRANGE scores 0 -1 WITHSCORES
+
+# 내림차순 정렬로 모든 멤버 조회
+ZREVRANGE scores 0 -1
+
+# 특정 멤버의 순위(0부터 시작)
+ZRANK scores user:1
+ZRANK scores user:3
+
+# user:1 점수 20으로 갱신 (기존 값 덮어씀)
+ZADD scores 20 user:1
+
+# user:2 점수 +1 증가
+ZINCRBY scores 1 user:2
+
+# 특정 멤버의 점수 조회
+ZSCORE scores user:1
+
+# 점수가 7~50인 멤버 조회
+ZRANGEBYSCORE scores 7 50
+
+# 점수가 10 이하인 멤버 조회
+ZRANGEBYSCORE scores -inf 10
+
+# 점수가 10 이하인 멤버 + 점수 함께 조회
+ZRANGEBYSCORE scores -inf 10 WITHSCORES
+
+# 점수가 5~15 사이인 멤버 수
+ZCOUNT scores 5 15
+
+# 특정 멤버 삭제
+ZREM scores user:2
