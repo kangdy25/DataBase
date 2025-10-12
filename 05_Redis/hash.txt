@@ -1,0 +1,29 @@
+# 해시 생성 (player:1에 여러 필드 저장)
+HSET player:1 name dongyoon xp 0 health 100
+
+# 특정 필드(name) 조회
+HGET player:1 name
+
+# 모든 필드와 값 조회
+HGETALL player:1
+
+# xp 값 +10 증가
+HINCRBY player:1 xp 10
+
+# health 값 -10 감소
+HINCRBY player:1 health -10
+
+# 변경된 전체 데이터 확인
+HGETALL player:1
+
+# 여러 필드(xp, health) 동시에 조회
+HMGET player:1 xp health
+
+# name 필드 값 수정
+HSET player:1 name dongyoon_kang
+
+# 여러 필드(xp, health, name) 조회
+HMGET player:1 xp health name
+
+# xp 필드가 존재하는지 확인 (1이면 있음, 0이면 없음)
+HEXISTS player:1 xp
