@@ -57,23 +57,58 @@
 // ============================
 // Redis
 // ============================
-import { createClient } from "redis";
+// import { createClient } from "redis";
 
-const client = createClient()
+// const client = createClient()
 
-await client.connect();
+// await client.connect();
 
-await client.set("hello", "world")
-const r1 = await client.get("hello")
+// await client.set("hello", "world")
+// const r1 = await client.get("hello")
 
-await client.flushAll()
+// await client.flushAll()
 
-await client.hSet("users:1", {
-    username: "dongyoon",
-    password: "123"
+// await client.hSet("users:1", {
+//     username: "dongyoon",
+//     password: "123"
+// })
+
+// const r2 = await client.hGetAll("users:1")
+// console.log(r2)
+
+// await client.disconnect();
+
+
+// ============================
+// Mongoose
+// ============================
+
+import * as mongoose from "mongoose"
+
+await mongoose.connect("mongodb://localhost:27017/movies")
+
+const moviesSchema = new mongoose.Schema({
+    title: { type: String, required: true },
+    director: { type: String, required: true },
+    rating: {
+        type: Number,
+        required: true,
+        min: [1, "No movie deserves less than 1"],
+        max: [10, "No movie is better than 10"],
+    }
+});
+
+const Movie = mongoose.model("Movie", moviesSchema);
+
+const movie = await Movie.create({
+    title: "The mongoose",
+    rating: 10
 })
 
-const r2 = await client.hGetAll("users:1")
-console.log(r2)
+console.log(movie)
 
-await client.disconnect();
+const movies = await Movie.find({rating: {$gte: 8.2}})
+// const movies = await Movie.find({director: "Christopher Nolan"})
+console.log(movies)
+
+await mongoose.disconnect();
