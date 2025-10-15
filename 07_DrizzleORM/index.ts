@@ -1,6 +1,7 @@
-// -------------------------
+// ============================
 // Drizzle Introspect
-// -------------------------
+// ============================
+
 // import Database from "better-sqlite3"
 // import { drizzle } from "drizzle-orm/better-sqlite3"
 // import { movies } from "./drizzle/schema.js"
@@ -20,32 +21,59 @@
 
 // console.log(result)
 
-// -------------------------
+
+// ============================
 // Drizzle Migrate
-// -------------------------
-import Database from "better-sqlite3";
-import { eq } from "drizzle-orm";
-import { drizzle } from "drizzle-orm/better-sqlite3";
-import { comments, users } from "./schema.js";
+// ============================
 
-const sqlite = new Database("users.db")
+// import Database from "better-sqlite3";
+// import { eq } from "drizzle-orm";
+// import { drizzle } from "drizzle-orm/better-sqlite3";
+// import { comments, users } from "./schema.js";
 
-const db = drizzle(sqlite, {logger: true})
+// const sqlite = new Database("users.db")
 
-const resultInsert1 = await db.insert(users).values({
-    username: "dongyoon"
-}).returning()
+// const db = drizzle(sqlite, {logger: true})
 
-const resultInsert2 = await db.insert(comments).values({
-    userId: 1,
-    payload: "Hello Drizzle!!"
-}).returning()
+// const resultInsert1 = await db.insert(users).values({
+//     username: "dongyoon"
+// }).returning()
 
-const resultSelect = await db.select().from(comments).where(eq(comments.userId, 1))
+// const resultInsert2 = await db.insert(comments).values({
+//     userId: 1,
+//     payload: "Hello Drizzle!!"
+// }).returning()
 
-const resultJoin = await db.select({
-    user: users.username,
-    comment: comments.payload
-}).from(comments).leftJoin(users, eq(comments.userId, users.userId))
+// const resultSelect = await db.select().from(comments).where(eq(comments.userId, 1))
 
-console.log(resultJoin)
+// const resultJoin = await db.select({
+//     user: users.username,
+//     comment: comments.payload
+// }).from(comments).leftJoin(users, eq(comments.userId, users.userId))
+
+// console.log(resultJoin)
+
+
+// ============================
+// Redis
+// ============================
+import { createClient } from "redis";
+
+const client = createClient()
+
+await client.connect();
+
+await client.set("hello", "world")
+const r1 = await client.get("hello")
+
+await client.flushAll()
+
+await client.hSet("users:1", {
+    username: "dongyoon",
+    password: "123"
+})
+
+const r2 = await client.hGetAll("users:1")
+console.log(r2)
+
+await client.disconnect();

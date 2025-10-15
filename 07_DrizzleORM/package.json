@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "better-sqlite3": "^12.4.1",
-    "drizzle-orm": "^0.44.6"
+    "drizzle-orm": "^0.44.6",
+    "redis": "^5.8.3"
   }
 }
